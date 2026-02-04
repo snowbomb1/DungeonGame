@@ -20,7 +20,18 @@ public class Player {
     }
 
     public String getStatus() {
-        return "Player - Level: " + level + ", Health: " + health + "/" + maxHealth + ", Experience: " + experience + "/" + EXPERIENCE_REQUIRED + ", Potions: " + potions;
+        String healthBar = createBar(health, maxHealth, 20);
+        String expBar = createBar(experience, EXPERIENCE_REQUIRED, 20);
+        return "Player - Level: " + level + "\n" +
+            "  Health: " + healthBar + " " + health + "/" + maxHealth + "\n" +
+            "  XP:     " + expBar + " " + experience + "/" + EXPERIENCE_REQUIRED + "\n" +
+            "  Potions: " + potions;
+    }
+
+    private String createBar(int current, int max, int barLength) {
+        int filled = (int) ((double) current / max * barLength);
+        int empty = barLength - filled;
+        return "[" + "█".repeat(filled) + "░".repeat(empty) + "]";
     }
 
     public boolean isAlive() {

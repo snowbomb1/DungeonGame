@@ -15,6 +15,15 @@ public class Game {
 
     private final String[] actions = {"Attack", "Run", "Use Potion"};
 
+    private void clearScreen() {
+        System.out.println("\n".repeat(50));
+    }
+
+    private void waitForContinue() {
+        System.out.println("\nPress Enter to continue...");
+        scanner.nextLine();
+    }
+
     public void increaseGameLevel() {
         if (gameLevel >= MAX_LEVEL) {
             gameLevel++; // Increment to indicate game completion
@@ -97,8 +106,8 @@ public class Game {
         System.out.println("Game Level: " + gameLevel);
         System.out.println("----- Player & Enemy Status -----");
         System.out.println(player.getStatus());
-        if (!bossFight) System.out.println(enemy.getStatus());
-        else System.out.println(boss.getStatus());
+        if (!bossFight) System.out.println(enemy.getStatus(goblinsDefeated, MAX_GOBLINS));
+        else System.out.println(boss.getStatus(0, 1));
         System.out.println("-----------------------");
     }
 
@@ -124,7 +133,9 @@ public class Game {
     public void startGame() {
         System.out.println("Welcome to the Goblin Battle Game!");
         while (!isGameOver() && !isGameComplete()) {
+            clearScreen();
             displayStatus();
+            System.out.println("Goblins defeated: " + goblinsDefeated + "/" + MAX_GOBLINS);
             displayActions();
             String action = getUserAction(null);
             switch (action) {
@@ -151,19 +162,24 @@ public class Game {
                             cumulativeDamageToEnemy = 0;  // Reset for boss
                         }
                     }
+                    waitForContinue();
                     break;
                 case "2":
                     runAway();
                     cumulativeDamageToEnemy = 0;  // Reset when running away
                     System.out.println("You ran away!");
                     System.out.println("You have happened upon a new goblin!");
+                    waitForContinue();
                     break;
                 case "3":
                     player.heal();
-                    enemyAttack();
+                    if (bossFight) bossAttack();
+                    else enemyAttack();
+                    waitForContinue();
                     break;
                 default:
                     System.out.println("Invalid action. Please choose again.");
+                    waitForContinue();
                     break;
             }
         }

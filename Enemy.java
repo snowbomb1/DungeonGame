@@ -34,8 +34,18 @@ public class Enemy {
         return health > 0;
     }
 
-    public String getStatus() {
-        return "Enemy - Health: " + health + "/" + maxHealth;
+    public String getStatus(int goblinsDefeated, int maxGoblins) {
+        String healthBar = createBar(health, maxHealth, 20);
+        String goblinBar = createBar(goblinsDefeated, maxGoblins, 20);
+        return "Enemy\n" +
+            "  Health: " + healthBar + " " + health + "/" + maxHealth + "\n" +
+            "  Enemies Defeated: " + goblinBar + " " + goblinsDefeated + "/" + maxGoblins;
+    }
+
+    private String createBar(int current, int max, int barLength) {
+        int filled = (int) ((double) current / max * barLength);
+        int empty = barLength - filled;
+        return "[" + "█".repeat(filled) + "░".repeat(empty) + "]";
     }
 
     public void heal() {
