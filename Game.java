@@ -145,7 +145,7 @@ public class Game {
                             cumulativeDamageToEnemy = 0;  // Reset for new enemy
                             System.out.println("A new goblin appears!");
                         } else {
-                            System.out.println("A Boss Goblin appears!");
+                            System.out.println("A Goblin King appears!");
                             bossFight = true;
                             goblinsDefeated = 0;
                             cumulativeDamageToEnemy = 0;  // Reset for boss
