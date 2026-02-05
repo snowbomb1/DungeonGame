@@ -28,16 +28,7 @@ A text-based dungeon crawler game written in Java. Battle goblins across multipl
 - A terminal or IDE to compile and run
 
 ### Running the Game
-
-1. Compile all Java files:
-   ```bash
-   javac *.java
-   ```
-
-2. Run the game:
-   ```bash
-   java Main
-   ```
+1. Run ```mvn clean compile javafx:run```
 
 ## How to Play
 

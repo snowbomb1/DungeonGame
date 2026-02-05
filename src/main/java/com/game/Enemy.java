@@ -1,3 +1,5 @@
+package com.game;
+
 public class Enemy {
     private int ATTACK_INCREASE_PER_LEVEL = 5;
     private int DEFAULT_HEALTH = 15;
@@ -14,8 +16,8 @@ public class Enemy {
         this.EXPERIENCE_PER_LEVEL = experiencePerLevel;
     }
 
-    private int health = DEFAULT_HEALTH;
-    private int maxHealth = DEFAULT_HEALTH;
+    public int health = DEFAULT_HEALTH;
+    public int maxHealth = DEFAULT_HEALTH;
     private int maxAttackDamage = DEFAULT_MAX_ATTACK_DAMAGE;
 
     public int getHealth() {

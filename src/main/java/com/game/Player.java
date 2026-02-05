@@ -1,3 +1,5 @@
+package com.game;
+
 public class Player {
     private final int POTION_HEAL = 20;
     private final int EXPERIENCE_REQUIRED = 100;
@@ -7,11 +9,11 @@ public class Player {
     private final int DEFAULT_MAX_ATTACK_DAMAGE = 15;
     private final int MIN_ATTACK_DAMAGE = 5;
 
-    private int health = DEFAULT_HEALTH;
-    private int maxHealth = DEFAULT_HEALTH;
+    public int health = DEFAULT_HEALTH;
+    public int maxHealth = DEFAULT_HEALTH;
     private int maxAttackDamage = DEFAULT_MAX_ATTACK_DAMAGE;
-    private int experience = 0;
-    private int level = 1;
+    public int experience = 0;
+    public int level = 1;
     private int potions = 3;
 
     public void increaseGameLevel(int gameLevel) {
