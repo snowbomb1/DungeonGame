@@ -43,10 +43,10 @@ public class CombatSystem {
         return new ExperienceGainOutput(xpThisHit, cumulativeDamageToEnemy);
     }
 
-    private Timeline createGlowEffect(Label label) {
-        Glow glow = new Glow(0.0);
+    private Timeline createGlowEffect(Label label, Color color, int totalTime) {
+        Glow glow = new Glow(1.0);
         DropShadow shadow = new DropShadow();
-            shadow.setColor(Color.RED);
+            shadow.setColor(color);
             shadow.setRadius(0);
             shadow.setSpread(0.0);
         shadow.setInput(glow);
@@ -56,17 +56,25 @@ public class CombatSystem {
                 new KeyValue(shadow.radiusProperty(), 0.0),
                 new KeyValue(glow.levelProperty(), 0.0)
             ),
-            new KeyFrame(Duration.millis(300),
+            new KeyFrame(Duration.millis(totalTime / 2),
                 new KeyValue(shadow.radiusProperty(), 10.0),
                 new KeyValue(glow.levelProperty(), 0.8)
             ),
-            new KeyFrame(Duration.millis(600),
+            new KeyFrame(Duration.millis(totalTime),
                 new KeyValue(shadow.radiusProperty(), 0.0),
                 new KeyValue(glow.levelProperty(), 0.0)
             )
         );
     
         return t;
+    }
+
+    public Timeline createShakeEffect(Label label) {
+        TranslateTransition shake = new TranslateTransition(Duration.millis(50), label);
+        shake.setByX(10);
+        shake.setAutoReverse(true);
+        shake.setCycleCount(6);
+        return new Timeline(new KeyFrame(Duration.ZERO, e -> shake.play()));
     }
 
     public void animateProgressBar(javafx.scene.control.ProgressBar progressBar, double to, Runnable onComplete) {
@@ -87,7 +95,7 @@ public class CombatSystem {
         playerAttack.setCycleCount(2);
 
         // Create damage effect on enemy character
-        Timeline effect = createGlowEffect(enemyChar);
+        Timeline effect = createGlowEffect(enemyChar, Color.RED, 500);
 
         playerAttack.play();
 
@@ -105,7 +113,7 @@ public class CombatSystem {
         enemyAttack.setCycleCount(2);
 
         // Create damage effect on player character
-        Timeline effect = createGlowEffect(playerChar);
+        Timeline effect = createGlowEffect(playerChar, Color.RED, 500);
 
         enemyAttack.play();
 
@@ -117,11 +125,11 @@ public class CombatSystem {
 
     public void animateEnemyDefeat(javafx.scene.control.Label enemyChar, Runnable onComplete) {
         // Enemy defeat animation (fade out)
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), enemyChar);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setOnFinished(event -> onComplete.run());
-        fadeOut.play();
+        TranslateTransition moveOut = new TranslateTransition(Duration.millis(500), enemyChar);
+        moveOut.setFromX(0);
+        moveOut.setToX(200);
+        moveOut.setOnFinished(event -> onComplete.run());
+        moveOut.play();
     }
 
     public void animateBossDefeat(javafx.scene.control.Label bossChar, Runnable onComplete) {
@@ -134,12 +142,11 @@ public class CombatSystem {
     }
 
     public void animateNewEnemy(javafx.scene.control.Label enemyChar, Runnable onComplete) {
-        // New enemy animation (fade in)
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), enemyChar);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.setOnFinished(event -> onComplete.run());
-        fadeIn.play();
+        TranslateTransition moveIn = new TranslateTransition(Duration.millis(500), enemyChar);
+        moveIn.setFromX(200);
+        moveIn.setToX(0);
+        moveIn.setOnFinished(event -> onComplete.run());
+        moveIn.play();
     }
 
     public void animateNewBoss(javafx.scene.control.Label bossChar, Runnable onComplete) {
@@ -184,5 +191,32 @@ public class CombatSystem {
         fadeIn.setOnFinished(event -> onComplete.run());
 
         fadeOut.play();
+    }
+
+    public void animateDamageIndicator(Label damageLabel, int damage) {
+        damageLabel.setText("-" + damage);
+        damageLabel.setOpacity(1.0);
+        damageLabel.setVisible(true);
+        TranslateTransition moveUp = new TranslateTransition(Duration.millis(800), damageLabel);
+        moveUp.setByY(-50);
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(800), damageLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        Timeline glow = createGlowEffect(damageLabel, Color.RED, 800);
+
+        ParallelTransition indicatorAnimation = new ParallelTransition(moveUp, fadeOut, glow);
+        indicatorAnimation.play();
+        indicatorAnimation.setOnFinished(event -> {
+            damageLabel.setVisible(false);
+            damageLabel.setTranslateY(0); // Reset position for next time
+        });
+    }
+
+    public void animatePlayerHeal(javafx.scene.control.Label playerChar, Runnable onComplete) {
+        // Player heal animation (glow effect)
+        Timeline effect = createGlowEffect(playerChar, Color.GREENYELLOW, 750);
+        effect.setOnFinished(event -> onComplete.run());
+        effect.play();
     }
 }

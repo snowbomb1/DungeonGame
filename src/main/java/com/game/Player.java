@@ -9,12 +9,25 @@ public class Player {
     private final int DEFAULT_MAX_ATTACK_DAMAGE = 15;
     private final int MIN_ATTACK_DAMAGE = 5;
 
-    public int health = DEFAULT_HEALTH;
-    public int maxHealth = DEFAULT_HEALTH;
+    private int health = DEFAULT_HEALTH;
+    private int maxHealth = DEFAULT_HEALTH;
     private int maxAttackDamage = DEFAULT_MAX_ATTACK_DAMAGE;
-    public int experience = 0;
-    public int level = 1;
+    private int experience = 0;
+    private int level = 1;
     private int potions = 3;
+
+    public int getHealth() { return health; }
+    public int getMaxHealth() { return maxHealth; }
+    public int getLevel() { return level; }
+    public int getExperience() { return experience; }
+    public int getPotions() { return potions; }
+
+    public void addHealth(int amount) {
+        health += amount;
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
+    }
 
     public void increaseGameLevel(int gameLevel) {
         potions = 3 + (gameLevel - 1);

@@ -25,32 +25,26 @@ public class GameController {
         boss = new Boss();
     }
 
-    public void handlePlayerAttack() {
+    public int handlePlayerAttack() {
         int damage = player.attack();
         if (isBossFight) {
             boss.takeDamage(damage);
-            if (!boss.isAlive()) {
-                isBossFight = false;
-                // Boss defeated logic
-            }
         } else {
             enemy.takeDamage(damage);
             if (!enemy.isAlive()) {
                 goblinsDefeated++;
-                if (goblinsDefeated >= 3) {
-                    isBossFight = true;
-                    goblinsDefeated = 0;
-                }
             }
         }
         ExperienceGainOutput result = combatSystem.calculateExperienceGain(damage, isBossFight, boss, enemy, gameLevel, cumulativeDamageToEnemy);
         player.gainExperience(result.experienceGained());
         cumulativeDamageToEnemy = result.cumulativeDamageToEnemy();
+        return damage;
     }
 
-    public void handleEnemyAttack() {
+    public int handleEnemyAttack() {
         int enemyDamage = isBossFight ? boss.attack() : enemy.attack();
         player.takeDamage(enemyDamage);
+        return enemyDamage;
     }
 
     public void increaseGameLevel() {
@@ -73,9 +67,6 @@ public class GameController {
     public void createNewEnemy() {
         enemy.heal();
         cumulativeDamageToEnemy = 0;
-        player.health += 10; // Small health boost between fights
-        if (player.health > player.maxHealth) {
-            player.health = player.maxHealth;
-        }
+        player.addHealth(10); // Small health boost between fights
     }
 }

@@ -16,8 +16,8 @@ public class Enemy {
         this.EXPERIENCE_PER_LEVEL = experiencePerLevel;
     }
 
-    public int health = DEFAULT_HEALTH;
-    public int maxHealth = DEFAULT_HEALTH;
+    private int health = DEFAULT_HEALTH;
+    private int maxHealth = DEFAULT_HEALTH;
     private int maxAttackDamage = DEFAULT_MAX_ATTACK_DAMAGE;
 
     public int getHealth() {
@@ -51,7 +51,7 @@ public class Enemy {
     }
 
     public void heal() {
-        health = DEFAULT_HEALTH;
+        health = maxHealth;
     }
 
     public void increaseGameLevel(int gameLevel) {
